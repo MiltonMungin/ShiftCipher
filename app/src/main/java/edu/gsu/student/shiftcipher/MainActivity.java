@@ -1,5 +1,6 @@
 package edu.gsu.student.shiftcipher;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -35,7 +36,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.button_encrypt)
     public void encrypt(){
-        doEncryption();
+        toSaveActivity();
     }
 
     @Override
@@ -58,16 +59,18 @@ public class MainActivity extends BaseActivity {
         String[] keys = new String[]{"guess", "1", "2", "3", "4"
                 , "5", "6", "7", "8", "9", "10", "11"
                 , "12", "13", "14", "15", "16", "17", "18", "19", "20"
-                , "21", "22", "23", "24"};
+                , "21", "22", "23", "24", "25", "26"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, keys);
         keySpinner.setAdapter(adapter);
 
     }
 
-    private void doEncryption(){
-        ShiftCipher sc = new ShiftCipher(file, keySpinner.getSelectedItem().toString());
-        toastShort("Key: " + sc.getKey());
+    private void toSaveActivity(){
+        Intent intent = new Intent(this, FileSaveActivity.class);
+        intent.putExtra("inputFile", inputFile);
+        intent.putExtra("key", keySpinner.getSelectedItem().toString());
+        startActivity(intent);
 
     }
 }

@@ -26,10 +26,12 @@ public class ShiftCipher extends Activity {
     private String key;
     private int intKey;
     private int mostFreq;
+    private String outputPath;
 
-    public ShiftCipher(File file, String key){
+    public ShiftCipher(File file, String outputPath, String key){
         this.file = file;
         this.key = key;
+        this.outputPath = outputPath;
         if(key.equals("guess")) {
             mostFreq = findMostChar();
             System.out.println("freq:"+mostFreq);
@@ -49,11 +51,8 @@ public class ShiftCipher extends Activity {
     }
 
     private void doEncryptionTask(){
-        String outPutDir = file.getPath();
-        outPutDir = outPutDir.substring(0, outPutDir.lastIndexOf("/"));
-        String fileName = file.getName();
-        fileName = fileName.substring(0, fileName.lastIndexOf("."));
-        String outPutFile = outPutDir + "/" + fileName + "-usekey-"+ key + ".txt";
+
+        String outPutFile = outputPath;
 
         try {
             FileReader fileReader = new FileReader(file);
@@ -69,15 +68,15 @@ public class ShiftCipher extends Activity {
                     curChar = line.toLowerCase().charAt(i);
                     int curCharInt = (int) curChar;
                     curCharInt = curCharInt - 97;
-                    if(curCharInt >= 0 && curCharInt < 26){
+                    if(curCharInt >= 0 && curCharInt < 25){
                         curCharInt = (curCharInt + intKey) % 26;
                     }
                     curCharInt = curCharInt + 97;
                     System.out.print((char)curCharInt);
                     writer.print((char)curCharInt);
                 }
-                System.out.println("");
                 writer.println("");
+                System.out.println("");
             }
             writer.close();
         } catch (IOException e) {
@@ -121,11 +120,4 @@ public class ShiftCipher extends Activity {
         return key;
     }
 
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
 }
